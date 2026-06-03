@@ -56,18 +56,34 @@ with st.sidebar:
 page = st.session_state.page
 
 # ----------------- TRANG TỔNG QUAN -----------------
+# ----------------- TRANG TỔNG QUAN -----------------
 if page == "Tổng quan":
     st.header("📊 Dashboard Tổng quan")
-    st.info("Chào mừng bạn đến với hệ thống Student Cloud GPU! Hãy nạp tiền và khởi tạo máy ảo để bắt đầu.")
     
+    # --- PHẦN GIỚI THIỆU CHUNG (MỚI THÊM) ---
+    st.markdown("""
+    ### 🎓 Về Student Cloud GPU (SCG)
+    **Student Cloud GPU** là nền tảng cung cấp máy chủ ảo (Cloud VPS) tích hợp Card đồ họa hiệu năng cao, được thiết kế và tối ưu hóa chi phí đặc biệt dành riêng cho sinh viên IT, AI và Data Science.
+    
+    **Tại sao bạn nên chọn SCG?**
+    * ⚡ **Nhanh chóng & Mạnh mẽ:** Không còn cảnh chờ đợi mòn mỏi hay lỗi OOM (Out of Memory) khi train các model nặng như CNN, YOLO hay GANs.
+    * 💰 **Tối ưu chi phí (Pay-as-you-go):** Thanh toán linh hoạt theo từng phút sử dụng, chỉ từ **4.500đ/giờ**. Phù hợp với túi tiền sinh viên, không bắt buộc mua gói tháng đắt đỏ.
+    * 🛠️ **Môi trường "Mì ăn liền":** Khởi tạo máy ảo có ngay `Python 3.10`, `PyTorch`, `TensorFlow`, `CUDA` và `Jupyter Notebook`. Vào là code được ngay!
+    """)
+    
+    st.divider()
+    
+    st.info("💡 Trạng thái tài khoản của bạn:")
+    
+    # --- PHẦN METRICS & LỊCH SỬ ---
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Số dư hiện tại", value="0 đ", delta="Chưa nạp tiền")
-    col2.metric(label="Máy ảo đang chạy", value="0", delta="Cần khởi tạo")
+    col1.metric(label="Số dư hiện tại", value="0 đ", delta="Cần nạp tiền", delta_color="off")
+    col2.metric(label="Máy ảo đang chạy", value="0", delta="Chưa khởi tạo", delta_color="off")
     col3.metric(label="Tổng giờ đã train", value="0 Giờ")
     
     st.divider()
-    st.subheader("Hoạt động gần đây")
-    st.caption("Chưa có lịch sử hoạt động nào.")
+    st.subheader("⏱️ Hoạt động gần đây")
+    st.caption("Chưa có lịch sử hoạt động nào. Hãy sang mục **Thuê GPU** để bắt đầu!")
 
 # ----------------- TRANG THUÊ GPU (FAKE DOOR CHÍNH) -----------------
 elif page == "Thuê GPU":
