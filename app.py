@@ -160,6 +160,7 @@ elif page == "Máy ảo":
     st.info("Hiện tại bạn chưa khởi tạo máy ảo nào. Hãy sang mục **Thuê GPU** để bắt đầu.")
 
 # ----------------- TRANG THANH TOÁN (FAKE DOOR PHỤ) -----------------
+# ----------------- TRANG THANH TOÁN (FAKE DOOR PHỤ) -----------------
 elif page == "Thanh toán":
     st.header("💳 Nạp tiền vào hệ thống")
     col1, col2 = st.columns([1, 2])
@@ -169,16 +170,26 @@ elif page == "Thanh toán":
         st.selectbox("Chọn phương thức", ["Momo", "ZaloPay", "Thẻ nội địa / VietQR"])
         st.number_input("Số tiền muốn nạp (VNĐ)", min_value=10000, step=10000, value=50000)
         
-        # Fake door cho những ai thực sự có ý định trả tiền
-        if st.button("Xác nhận nạp tiền", type="primary"):
-            st.error("Cổng thanh toán tự động đang nâng cấp định kỳ.")
-            st.info("Để nạp tiền thủ công, vui lòng để lại Email/Số điện thoại, nhân viên CSKH sẽ liên hệ hỗ trợ bạn nạp tiền ngay lập tức!")
-            with st.form("payment_form"):
-                pay_email = st.text_input("Email/SĐT của bạn:")
-                if st.form_submit_button("Yêu cầu hỗ trợ nạp tiền"):
-                    if pay_email:
-                        status = save_lead(pay_email, "Yêu cầu Nạp tiền")
-                        st.success("Đã ghi nhận! CSKH sẽ liên hệ với bạn trong 5 phút nữa.")
+        # Bỏ st.button đi, cho thông báo và form hiện trực tiếp
+        st.error("⚠️ Cổng thanh toán tự động đang nâng cấp định kỳ.")
+        st.info("Để nạp tiền thủ công, vui lòng để lại Email/Số điện thoại, nhân viên CSKH sẽ liên hệ hỗ trợ bạn nạp tiền ngay lập tức!")
+        
+        with st.form("payment_form"):
+            pay_email = st.text_input("Email/SĐT của bạn:")
+            submit_pay = st.form_submit_button("Yêu cầu hỗ trợ nạp tiền", type="primary")
+            
+            if submit_pay:
+                if pay_email.strip() == "":
+                    st.error("Vui lòng nhập Email hoặc SĐT!")
+                else:
+                    # Tận dụng luôn hàm save_lead đã bắt lỗi ở trên
+                    status = save_lead(pay_email, "Yêu cầu Nạp tiền")
+                    
+                    if status == 200:
+                        st.success("✅ THÀNH CÔNG: Đã ghi nhận! CSKH sẽ liên hệ với bạn trong 5 phút nữa.")
+                        st.balloons()
+                    else:
+                        st.error(f"❌ THẤT BẠI: Không lưu được data! Mã lỗi: {status}")
 
 # ----------------- TRANG HỖ TRỢ -----------------
 elif page == "Hỗ trợ":
