@@ -3,17 +3,25 @@ import pandas as pd
 import os
 import datetime
 
-# --- HÀM LƯU DỮ LIỆU KHÁCH HÀNG (LEADS) ---
+# --- HÀM LƯU DỮ LIỆU THẲNG VÀO GOOGLE SHEETS ---
 def save_lead(email, intent_type):
-    file_name = 'leads.csv'
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    new_data = pd.DataFrame({"Thời gian": [now], "Email/MSSV": [email], "Hành động/Gói chọn": [intent_type]})
     
-    if os.path.exists(file_name):
-        new_data.to_csv(file_name, mode='a', header=False, index=False)
-    else:
-        new_data.to_csv(file_name, index=False)
-
+    # 1. URL Form đích (Đã tự động chuyển viewform thành formResponse)
+    url = "https://docs.google.com/forms/d/e/1FAIpQLSc8OUEVwzrGHgKNnml0Wn2i7IpUBEhdufm5LGN4HdsD1YY-IQ/formResponse"
+    
+    # 2. Dữ liệu map chính xác với Form của bạn
+    form_data = {
+        "entry.730150072": now,          # ID Câu 1: Thời gian
+        "entry.2140267885": email,       # ID Câu 2: Email
+        "entry.528554394": intent_type   # ID Câu 3: Hành động
+    }
+    
+    # Bắn dữ liệu lên Google Sheets
+    try:
+        requests.post(url, data=form_data)
+    except:
+        pass # Nếu mạng lỗi thì bỏ qua để không làm sập giao diện web
 # Cấu hình trang
 st.set_page_config(page_title="Student Cloud GPU", page_icon="☁️", layout="wide")
 
