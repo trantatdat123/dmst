@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import datetime
+import requests
 
 # --- HÀM LƯU DỮ LIỆU THẲNG VÀO GOOGLE SHEETS ---
 def save_lead(email, intent_type):
