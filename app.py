@@ -6,23 +6,25 @@ import requests
 
 # --- HÀM LƯU DỮ LIỆU THẲNG VÀO GOOGLE SHEETS ---
 def save_lead(email, intent_type):
+   def save_lead(email, intent_type):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # 1. URL Form đích (Đã tự động chuyển viewform thành formResponse)
     url = "https://docs.google.com/forms/d/e/1FAIpQLSc8OUEVwzrGHgKNnml0Wn2i7IpUBEhdufm5LGN4HdsD1YY-IQ/formResponse"
     
-    # 2. Dữ liệu map chính xác với Form của bạn
     form_data = {
-        "entry.730150072": now,          # ID Câu 1: Thời gian
-        "entry.2140267885": email,       # ID Câu 2: Email
-        "entry.528554394": intent_type   # ID Câu 3: Hành động
+        "entry.730150072": now,
+        "entry.2140267885": email,
+        "entry.528554394": intent_type
     }
     
-    # Bắn dữ liệu lên Google Sheets
-    try:
-        requests.post(url, data=form_data)
-    except:
-        pass # Nếu mạng lỗi thì bỏ qua để không làm sập giao diện web
+    # Bỏ try-except đi để xem lỗi thực tế
+    response = requests.post(url, data=form_data)
+    
+    # In thẳng kết quả ra màn hình web
+    if response.status_code == 200:
+        st.success("✅ Phản hồi từ Google: Đã nhận dữ liệu thành công!")
+    else:
+        st.error(f"❌ Google báo lỗi Code {response.status_code}: Form đang bị khóa hoặc sai ID.")
+        st.write("Chi tiết lỗi:", response.text)
 # Cấu hình trang
 st.set_page_config(page_title="Student Cloud GPU", page_icon="☁️", layout="wide")
 
