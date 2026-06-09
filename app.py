@@ -5,8 +5,8 @@ import datetime
 import requests
 
 # --- HÀM LƯU DỮ LIỆU THẲNG VÀO GOOGLE SHEETS ---
+# --- HÀM LƯU DỮ LIỆU ---
 def save_lead(email, intent_type):
-   def save_lead(email, intent_type):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     url = "https://docs.google.com/forms/d/e/1FAIpQLSc8OUEVwzrGHgKNnml0Wn2i7IpUBEhdufm5LGN4HdsD1YY-IQ/formResponse"
     
@@ -16,15 +16,9 @@ def save_lead(email, intent_type):
         "entry.528554394": intent_type
     }
     
-    # Bỏ try-except đi để xem lỗi thực tế
+    # Gửi lên Google và trả về mã trạng thái (status code)
     response = requests.post(url, data=form_data)
-    
-    # In thẳng kết quả ra màn hình web
-    if response.status_code == 200:
-        st.success("✅ Phản hồi từ Google: Đã nhận dữ liệu thành công!")
-    else:
-        st.error(f"❌ Google báo lỗi Code {response.status_code}: Form đang bị khóa hoặc sai ID.")
-        st.write("Chi tiết lỗi:", response.text)
+    return response.status_code
 # Cấu hình trang
 st.set_page_config(page_title="Student Cloud GPU", page_icon="☁️", layout="wide")
 
@@ -150,9 +144,15 @@ elif page == "Thuê GPU":
                 if email_input.strip() == "":
                     st.error("Vui lòng nhập Email hoặc MSSV!")
                 else:
-                    save_lead(email_input, st.session_state.selected_gpu)
-                    st.success("✅ Tuyệt vời! Thông tin đã được ghi nhận. Vui lòng kiểm tra email vào sáng ngày mai nhé!")
-                    st.balloons()
+                    # Gọi hàm và lấy kết quả trả về
+                    status = save_lead(email_input, st.session_state.selected_gpu)
+                    
+                    # Kiểm tra xem Google có nhận data thật không
+                    if status == 200:
+                        st.success("✅ THÀNH CÔNG: Dữ liệu đã nhảy vào Google Sheets!")
+                        st.balloons()
+                    else:
+                        st.error(f"❌ THẤT BẠI: Google chặn lại rồi! Mã lỗi: {status}")
 
 # ----------------- TRANG MÁY ẢO -----------------
 elif page == "Máy ảo":
