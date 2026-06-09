@@ -142,7 +142,7 @@ elif page == "Thuê GPU":
             
             if submit:
                 if email_input.strip() == "":
-                    st.error("Vui lòng nhập Email hoặc MSSV!")
+                    st.error("Vui lòng nhập Email!")
                 else:
                     # Gọi hàm và lấy kết quả trả về
                     status = save_lead(email_input, st.session_state.selected_gpu)
@@ -177,7 +177,7 @@ elif page == "Thanh toán":
                 pay_email = st.text_input("Email/SĐT của bạn:")
                 if st.form_submit_button("Yêu cầu hỗ trợ nạp tiền"):
                     if pay_email:
-                        save_lead(pay_email, "Yêu cầu Nạp tiền")
+                        status = save_lead(pay_email, "Yêu cầu Nạp tiền")
                         st.success("Đã ghi nhận! CSKH sẽ liên hệ với bạn trong 5 phút nữa.")
 
 # ----------------- TRANG HỖ TRỢ -----------------
