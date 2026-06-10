@@ -165,7 +165,7 @@ elif page == "Thanh toán":
     st.header("💳 Nạp tiền vào hệ thống")
     col1, col2 = st.columns([1, 2])
     with col1:
-        st.image("https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg", caption="Quét mã QR bằng Momo/ZaloPay")
+        st.image("qr.png", caption="Quét mã QR bằng Momo/ZaloPay")
     with col2:
         st.selectbox("Chọn phương thức", ["Momo", "ZaloPay", "Thẻ nội địa / VietQR"])
         st.number_input("Số tiền muốn nạp (VNĐ)", min_value=10000, step=10000, value=50000)
